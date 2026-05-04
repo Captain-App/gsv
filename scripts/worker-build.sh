@@ -17,9 +17,22 @@ fi
 
 LOCK_PATH="${TMPDIR:-/tmp}/gsv-worker-build.lock"
 
-(
-  flock 9
+run_build() {
   cd "$CRATE_DIR"
   cargo install -q "worker-build@^0.7"
   worker-build "$@" .
-) 9>"$LOCK_PATH"
+}
+
+if command -v flock >/dev/null 2>&1; then
+  (
+    flock 9
+    run_build "$@"
+  ) 9>"$LOCK_PATH"
+else
+  LOCK_DIR="${LOCK_PATH}.d"
+  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+    sleep 1
+  done
+  trap 'rmdir "$LOCK_DIR"' EXIT
+  run_build "$@"
+fi

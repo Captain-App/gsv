@@ -10,16 +10,20 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"migrations": [
 		{
-			"new_sqlite_classes": ["Kernel"],
+			"new_sqlite_classes": ["Gateway"],
 			"tag": "v1"
 		},
 		{
-			"new_sqlite_classes": ["Process"],
+			"new_sqlite_classes": ["Session"],
 			"tag": "v2"
 		},
 		{
-			"new_sqlite_classes": ["AppRunner"],
 			"tag": "v3"
+		},
+		{
+			"deleted_classes": ["Gateway", "Session"],
+			"new_sqlite_classes": ["Kernel", "Process", "AppRunner"],
+			"tag": "v4"
 		}
 	],
 	"durable_objects": {
@@ -52,7 +56,7 @@
 		"directory": "../web/dist/",
 		"binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/ws", "/apps/*", "/app-rpc/*", "/git/*", "/runtime/*", "/downloads/*"]
+    "run_worker_first": ["/health", "/ws", "/apps/*", "/app-rpc/*", "/git/*", "/runtime/*", "/downloads/*"]
 	},
 	// Channel service bindings (Gateway → Channel RPC)
 	"services": [

@@ -5,7 +5,7 @@ if [[ -n "${RIPGIT_WASM_CC:-}" ]]; then
   exec "${RIPGIT_WASM_CC}" "$@"
 fi
 
-for candidate in clang clang-18 clang-17 clang-16 zig; do
+for candidate in /opt/homebrew/opt/llvm@21/bin/clang /opt/homebrew/opt/llvm/bin/clang clang-21 clang-18 clang-17 clang-16 zig clang; do
   if command -v "${candidate}" >/dev/null 2>&1; then
     if [[ "${candidate}" == "zig" ]]; then
       exec zig cc "$@"
